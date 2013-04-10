@@ -49,7 +49,9 @@ common_host_cflags += -DMISSING_MREMAP
 common_host_ldlibs_libiconv := -liconv
 else
 ifeq ($(HOST_OS)-$(HOST_ARCH),linux-x86)
+ifeq ($(findstring android-toolchain-eabi,$(TARGET_TOOLS_PREFIX)),)
 HAVE_LIBBFD := true
+endif
 endif
 endif
 endif
