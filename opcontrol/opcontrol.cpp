@@ -206,14 +206,14 @@ int setup_device(void)
 {
     if (mkdir(OP_DRIVER_BASE, 0755)) {
         if (errno != EEXIST) {
-            fprintf(stderr, "Cannot create directory "OP_DRIVER_BASE": %s\n",
+            fprintf(stderr, "Cannot create directory " OP_DRIVER_BASE ": %s\n",
                     strerror(errno));
             return -1;
         }
     }
 
     if (access(OP_DRIVER_BASE"/stats", F_OK)) {
-        if (system("mount -t oprofilefs nodev "OP_DRIVER_BASE)) {
+        if (system("mount -t oprofilefs nodev " OP_DRIVER_BASE)) {
             return -1;
         }
     }
@@ -247,7 +247,7 @@ int setup_device(void)
 	return -1;
     }
     for (max_events = 0; max_events < MAX_EVENTS; max_events++) {
-	snprintf(buf, sizeof(buf), OP_DRIVER_BASE"/%d", max_events);
+	snprintf(buf, sizeof(buf), OP_DRIVER_BASE "/%d", max_events);
 	if (access(buf, F_OK) < 0)
 	    break;
     }
@@ -261,7 +261,7 @@ int setup_device(void)
 void setup_session_dir()
 {
     if (access(OP_DATA_DIR, F_OK) == 0)
-        system("rm -r "OP_DATA_DIR);
+        system("rm -r " OP_DATA_DIR);
 
     if (mkdir(OP_DATA_DIR, 0755)) {
         fprintf(stderr, "Cannot create directory \"%s\": %s\n",
@@ -419,7 +419,7 @@ int echo_dev(const char* str, int val, const char* file, int counter)
     char fullname[512];
     char content[128];
     int fd;
-    
+
     if (counter >= 0) {
         snprintf(fullname, 512, OP_DRIVER_BASE"/%d/%s", counter, file);
     }
@@ -529,7 +529,7 @@ void do_status()
     }
 }
 
-void do_reset() 
+void do_reset()
 {
     /*
      * Sending SIGHUP will result in the following crash in oprofiled when
@@ -579,7 +579,7 @@ int main(int argc, char * const argv[])
                 strncpy(callgraph, optarg, sizeof(callgraph));
                 break;
             /* --event */
-            case 'e':   
+            case 'e':
                 if (num_events == MAX_EVENTS) {
                     fprintf(stderr, "More than %d events specified\n",
                             MAX_EVENTS);
@@ -677,7 +677,7 @@ int main(int argc, char * const argv[])
         strcpy(slash ? slash + 1 : command, "oprofiled --session-dir=" OP_DATA_DIR);
 
 #if defined(__arm__) && !defined(WITH_ARM_V7_A)
-        /* Since counter #3 can only handle CPU_CYCLES, check and shuffle the 
+        /* Since counter #3 can only handle CPU_CYCLES, check and shuffle the
          * order a bit so that the maximal number of events can be profiled
          * simultaneously
          */
@@ -738,7 +738,7 @@ int main(int argc, char * const argv[])
             setup_result |= echo_dev(NULL, event_info[event_idx].um, "unit_mask", i);
             setup_result |= echo_dev("1", 0, "enabled", i);
             setup_result |= echo_dev(NULL, selected_counts[i], "count", i);
-            setup_result |= echo_dev(NULL, event_info[event_idx].id, 
+            setup_result |= echo_dev(NULL, event_info[event_idx].id,
                                      "event", i);
             if (setup_result) {
                 fprintf(stderr, "Counter configuration failed for %s\n",
